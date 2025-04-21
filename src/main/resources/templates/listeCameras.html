@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <title>Liste des Cameras</title>
+  <link rel="stylesheet" type="text/css" href="webjars/bootstrap/4.3.1/css/bootstrap.min.css" />
+</head>
+<body>
+	<div th:replace="NavBar"></div> 
+  <div class="container mt-5">
+    <div class="card">
+      <div class="card-header">
+        Liste des Cameras
+      </div>
+      <div class="card-body">
+
+        <!-- Table displaying camera details -->
+        <table class="table table-striped">
+          <tr>
+            <th>ID</th>
+            <th>Type du camera</th>
+            <th>Nom du camera</th>
+            <th>Resolution du camera</th>
+            <th>Warranty expiry date</th>
+			<th>Lens focal_length</th>
+            <th>Actions</th>
+          </tr>
+          <tr th:each="c : ${cameras.content}">
+            <td th:text="${c.id}"></td>
+            <td th:text="${c.type}"></td>
+            <td th:text="${c.name}"></td>
+            <td th:text="${c.resolution}"></td>
+            <td th:text="${#dates.format(c.warranty_expiry_date, 'yyyy-MM-dd')}"></td>
+
+			<td th:if="${c.lens != null}" th:text="${c.lens.focalLength}"></td>
+			<td th:if="${c.lens == null}" th:text="'Pas de Lens'"></td>
+
+            <td>
+              <a class="btn btn-danger"
+                 th:href="@{/supprimerCamera(id=${c.id}, page=${currentPage}, size=${size})}">
+                 Supprimer
+              </a>
+			  <a class="btn btn-success" th:href="@{/modifierCamera(id=${c.id},page=${currentPage},size=${size})}">Editer</a>
+            </td>
+          </tr>
+        </table>
+
+        <!-- Pagination Navigation -->
+        <ul class="nav nav-pills">
+          <li th:each="page, status : ${pages}">
+            <a th:class="${status.index == currentPage ? 'btn btn-primary' : 'btn'}"
+               th:href="@{/ListeCamera(page=${status.index}, size=${size})}"
+               th:text="${status.index + 1}"></a>
+          </li>
+        </ul>
+
+      </div>
+    </div>
+  </div>
+</body>
+</html>

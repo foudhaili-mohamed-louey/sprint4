@@ -1,0 +1,61 @@
+<!DOCTYPE html> 
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">      
+<head> 
+  <meta charset="utf-8"> 
+  <title>Modifier la Camera</title> 
+  <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" /> 
+</head> 
+<body> 
+  <div th:replace="NavBar"></div>  
+
+  <div class="container mt-5"> 
+    <div class="card"> 
+      <div class="card-header"> 
+        Modifier la Camera
+      </div> 
+
+      <div class="card-body"> 
+        <form th:action="@{/updateCamera}" method="post"> 
+    
+          <input type="hidden" name="id" class="form-control" th:value="${camera.id}" />
+
+        
+      
+
+        
+		  <div class="form-group"> 
+		    <label class="control-label">Type :</label>  
+		    <input type="text" name="type" class="form-control" th:value="${camera.type}" /> 
+		    <span th:errors="${camera.type}" class="text-danger"></span>  
+		  </div>
+		  
+		  <div class="form-group"> 
+		            <label class="control-label">Nom de la caméra :</label>  
+		            <input type="text" name="name" class="form-control" th:value="${camera.name}" /> 
+		            <span th:errors="${camera.name}" class="text-danger"></span>   
+		          </div> 
+			
+		  
+		  <div class="form-group"> 
+		              <label class="control-label">resolution :</label>  
+		              <input type="text" name="resolution" class="form-control" th:value="${camera.resolution}" /> 
+		              <span th:errors="${camera.resolution}" class="text-danger"></span>   
+		            </div> 
+        
+          <div class="form-group"> 
+            <label class="control-label">Date de fin de garantie :</label>  
+			<input type="date" name="warranty_expiry_date" class="form-control"
+			       th:value="${#dates.format(camera.warranty_expiry_date, 'yyyy-MM-dd')}" />
+            <span th:errors="${camera.warranty_expiry_date}" class="text-danger"></span>  
+          </div>
+
+          <div> 
+            <button type="submit" class="btn btn-primary">Valider</button> 
+          </div> 
+        </form> 
+      </div> 
+    </div> 
+  </div> 
+</body> 
+</html>
