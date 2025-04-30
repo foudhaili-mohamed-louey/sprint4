@@ -10,14 +10,14 @@
 
     <div class="container mt-5">
         <div class="card">
-            <!-- Header based on mode -->
+          
             <div class="card-header" th:if="${mode=='new'}">Ajout des Cameras</div>
             <div class="card-header" th:if="${mode=='edit'}">Modification des Cameras</div>
 
             <div class="card-body">
                 <form th:action="@{${mode == 'edit'} ? 'updateCamera' : 'saveCamera'}" method="post"> 
 
-                    <!-- Hidden ID field for edit mode -->
+                 
                     <div class="form-group">
                         <label class="control-label" hidden>ID Camera :</label>  
                         <input type="hidden" name="id" class="form-control" th:value="${camera.id}" /> 
@@ -48,11 +48,11 @@
                         <span th:errors="${camera.warranty_expiry_date}" class="text-danger"> </span>   
                     </div> 
 
-                    <!-- Lens Selection Dropdown -->
+                    
                     <div class="form-group">
                         <label class="control-label">Objectif (Lens) :</label>
 
-                        <!-- Edit Mode or Camera with Lens -->
+                        
                         <select name="lens" class="form-control" 
                                 th:if="${mode=='edit' and camera.lens != null}">
                             <option th:each="l : ${lenses}" 
@@ -62,7 +62,7 @@
                             </option>
                         </select>
 
-                        <!-- Add Mode or Camera without Lens -->
+                        
                         <select name="lens" class="form-control" 
                                 th:if="${mode=='new' or camera.lens == null}">
                             <option th:each="l : ${lenses}" 

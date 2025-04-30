@@ -14,7 +14,7 @@
       </div>
       <div class="card-body">
 
-        <!-- Table displaying camera details -->
+        
         <table class="table table-striped">
           <tr>
             <th>ID</th>
@@ -45,7 +45,7 @@
           </tr>
         </table>
 
-        <!-- Pagination Navigation -->
+       
         <ul class="nav nav-pills">
           <li th:each="page, status : ${pages}">
             <a th:class="${status.index == currentPage ? 'btn btn-primary' : 'btn'}"

@@ -32,7 +32,7 @@ public class CameraControllers {
         modelMap.addAttribute("cameras", cams);
         modelMap.addAttribute("pages", new int[cams.getTotalPages()]);
         modelMap.addAttribute("currentPage", page);
-        modelMap.addAttribute("size", size); // add size for pagination
+        modelMap.addAttribute("size", size); 
         return "listeCameras";
     }
 
@@ -46,30 +46,29 @@ public class CameraControllers {
     }
 
     @RequestMapping("/saveCamera")
-    public String saveProduit(@Valid Camera camera , BindingResult bindingResult, @RequestParam(name="page",defaultValue = "0") int page , @RequestParam(name="size",defaultValue = "2") int size) 
-    {
-    	int currentPage;
-    	boolean isNew = false;
-    	if(bindingResult.hasErrors()) return "formCamera";
-    	
-    	if(camera.getId() == 0)
-    	{
-    		isNew=true;
-    	}
-    	
-    cameraService.saveCamera(camera);
-    
-    if(isNew)
-    {
-    	Page<Camera> cams = cameraService.getAllCamerasParPage(page, size);
-    	currentPage = cams.getTotalPages()-1;
+    public String saveProduit(@Valid Camera camera,
+                              BindingResult bindingResult,
+                              @RequestParam(name = "page", defaultValue = "0") int page,
+                              @RequestParam(name = "size", defaultValue = "2") int size) {
+        boolean isNew = (camera.getId() == 0);
+
+        if (bindingResult.hasErrors()) return "formCamera";
+
+        cameraService.saveCamera(camera);
+
+        int redirectPage;
+        if (isNew) {
+            Page<Camera> cams = cameraService.getAllCamerasParPage(0, size);
+            int totalElements = (int) cams.getTotalElements() + 1;
+            redirectPage = (totalElements - 1) / size;
+        } else {
+            redirectPage = page;
+        }
+
+        return "redirect:/ListeCamera?page=" + redirectPage + "&size=" + size;
     }
-    else
-    {
-    	currentPage=page;
-    }
-    return "redirect:/formCamera"; 
-    } 
+    	
+ 
 
     @RequestMapping("/supprimerCamera")
     public String supprimerCamera(@RequestParam("id") int id,
@@ -86,7 +85,7 @@ public class CameraControllers {
     }
 
     @RequestMapping("/modifierCamera")
-    public String editerCamera(@RequestParam("id") int id, ModelMap modelMap) {
+    public String editerCamera(@RequestParam("id") int id, ModelMap modelMap ) {
         Camera c = cameraService.getCamera(id);
         List<Lens> lens = cameraService.getAllLens();
         modelMap.addAttribute("camera", c);
@@ -98,11 +97,37 @@ public class CameraControllers {
     @RequestMapping("/updateCamera")
     public String updateProduit(@Valid @ModelAttribute("camera") Camera camera,
                                 BindingResult bindingResult,
-                                ModelMap modelMap) {	
+                                @RequestParam(name = "page", defaultValue = "0") int page,
+                                @RequestParam(name = "size", defaultValue = "2") int size,
+                                ModelMap modelMap) {
         if (bindingResult.hasErrors()) {
-            return "editerCamera";
+            List<Lens> lens = cameraService.getAllLens();
+            modelMap.addAttribute("lenses", lens);
+            modelMap.addAttribute("mode", "edit");
+            return "formCamera";
         }
+
         cameraService.updateCamera(camera);
-        return "redirect:/ListeCamera";
+        List<Camera> allCams = cameraService.getAllCameras();
+        int index = -1;
+        for (int i = 0; i < allCams.size(); i++) {
+            if (allCams.get(i).getId() == camera.getId()) {
+                index = i;
+                break;
+            }
+        }
+        int redirectPage = (index != -1) ? (index / size) : page;
+
+        return "redirect:/ListeCamera?page=" + redirectPage + "&size=" + size;
     }
+    @GetMapping(value = "/") 
+    public String welcome() { 
+    	return "index"; 
+    } 
+    @GetMapping(value = "/login")
+    public String login()
+    {
+    	return "login";
+    }
+
 }
