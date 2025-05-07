@@ -2,7 +2,10 @@ package com.Foudhaili.Camera.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -10,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.Foudhaili.Camera.Models.Camera;
 import com.Foudhaili.Camera.Models.Lens;
+import com.Foudhaili.Camera.dto.CameraDTO;
 import com.Foudhaili.Camera.repos.CameraRepository;
 import com.Foudhaili.Camera.repos.LensRepository;
 
@@ -21,15 +25,18 @@ public class CameraServiceImpl implements CameraService {
     
     @Autowired
     private LensRepository lensRepository;
+    
+    @Autowired 
+    ModelMapper modelMapper; 
 
     @Override
-    public Camera saveCamera(Camera c) {
-        return cameraRepository.save(c);
+    public CameraDTO saveCamera(CameraDTO c) {
+        return convertEntityToDto(cameraRepository.save(convertDtoToEntity(c)));
     }
 
     @Override
-    public Camera updateCamera(Camera c) {
-        return cameraRepository.save(c);
+    public CameraDTO updateCamera(CameraDTO c) {
+        return  convertEntityToDto(cameraRepository.save(convertDtoToEntity(c)));
     }
 
     @Override
@@ -43,14 +50,23 @@ public class CameraServiceImpl implements CameraService {
     }
 
     @Override
-    public Camera getCamera(int id) {
-        Optional<Camera> camera = cameraRepository.findById(id);
-        return camera.orElse(null);
+    public CameraDTO getCamera(int id) {
+        
+    	return convertEntityToDto(cameraRepository.findById(id).get());
     }
 
     @Override
-    public List<Camera> getAllCameras() {
-        return cameraRepository.findAll();
+    public List<CameraDTO> getAllCameras() {
+    	return cameraRepository.findAll().stream() 
+    		    .map(this::convertEntityToDto) 
+    		    .collect(Collectors.toList()); 
+    		   
+    		  //OU BIEN 
+    		  /*List<Camera> camss =  cameraRepository.findAll(); 
+    		  List<CameraDTO> listcamsDto = new ArrayList<>(cams.size()); 
+    		  for (Camera c : cams) 
+    		   listcamsDto.add(convertEntityToDto(c)); 
+    		  return listcams Dto;*/ 
     }
 
     @Override 
@@ -93,4 +109,19 @@ public class CameraServiceImpl implements CameraService {
 		
 		return lensRepository.findAll();
 	}
+	@Override 
+	public CameraDTO convertEntityToDto(Camera camera) {
+		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
+	CameraDTO cameraDTO = modelMapper.map(camera, CameraDTO.class); 
+	return cameraDTO;  
+	} 
+
+	@Override
+	public Camera convertDtoToEntity(CameraDTO cameraDTO) {
+	    modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
+	    return modelMapper.map(cameraDTO, Camera.class);
+	}
+
+
+
 }

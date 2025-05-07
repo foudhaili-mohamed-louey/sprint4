@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.Foudhaili.Camera.Models.Camera;
 import com.Foudhaili.Camera.Models.Lens;
+import com.Foudhaili.Camera.dto.CameraDTO;
 import com.Foudhaili.Camera.service.CameraService;
 
 import jakarta.validation.Valid;
@@ -86,7 +87,7 @@ public class CameraControllers {
 
     @RequestMapping("/modifierCamera")
     public String editerCamera(@RequestParam("id") int id, ModelMap modelMap ) {
-        Camera c = cameraService.getCamera(id);
+        CameraDTO c = cameraService.getCamera(id);
         List<Lens> lens = cameraService.getAllLens();
         modelMap.addAttribute("camera", c);
         modelMap.addAttribute("lenses",lens);
@@ -108,7 +109,7 @@ public class CameraControllers {
         }
 
         cameraService.updateCamera(camera);
-        List<Camera> allCams = cameraService.getAllCameras();
+        List<CameraDTO> allCams = cameraService.getAllCameras();
         int index = -1;
         for (int i = 0; i < allCams.size(); i++) {
             if (allCams.get(i).getId() == camera.getId()) {
@@ -124,10 +125,6 @@ public class CameraControllers {
     public String welcome() { 
     	return "index"; 
     } 
-    @GetMapping(value = "/login")
-    public String login()
-    {
-    	return "login";
-    }
+    
 
 }

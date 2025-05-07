@@ -7,16 +7,25 @@ import org.springframework.data.repository.query.Param;
 
 import com.Foudhaili.Camera.Models.Camera;
 import com.Foudhaili.Camera.Models.Lens;
+import com.Foudhaili.Camera.dto.CameraDTO;
 
 public interface CameraService {
 
 	  
-		  Camera saveCamera(Camera c); 
-		  Camera updateCamera(Camera c); 
+		  CameraDTO saveCamera(CameraDTO c); 
+		  CameraDTO getCamera(int id); 
+		  List<CameraDTO> getAllCameras(); 
+		  
+			
+		  
+		  
+		  
+		  CameraDTO updateCamera(CameraDTO c);
+		  
+		  
 		  void deleteCamera(Camera c); 
 		  void deleteCameraById(int id); 
-		  Camera getCamera(int id); 
-		  List<Camera> getAllCameras(); 
+		   
 		  Page<Camera> getAllCamerasParPage(int page, int size); 
 		  List<Camera> findByName(String name);
 	  	List<Camera> findByNameContains(String name);
@@ -27,6 +36,10 @@ public interface CameraService {
 		
 		
 		List<Lens> getAllLens();
+		CameraDTO convertEntityToDto (Camera camera);
+		Camera convertDtoToEntity(CameraDTO produitDto); 
+		
+	
 
 }
 

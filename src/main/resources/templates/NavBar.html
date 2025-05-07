@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec=https://www.thymeleaf.org/thymeleaf-extras-springsecurity6 >
 <link rel="stylesheet" type="text/css" href="webjars/bootstrap/4.3.1/css/bootstrap.min.css" />
 <script src="webjars/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript" src="webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
@@ -25,7 +25,7 @@
 					Cameras
 				</a>
 				<div class="dropdown-menu">
-					<a class="dropdown-item" th:href="@{showCreate}">Ajouter</a>
+					<a class="dropdown-item" th:href="@{showCreate}" sec:authorize="hasAnyAuthority('ADMIN', 'AGENT')">Ajouter</a>
 					<a class="dropdown-item" th:href="@{ListeCamera}">Lister</a>
 				</div>
 			</li>
@@ -34,11 +34,11 @@
 		<ul class="navbar-nav ml-auto">
 			<li class="nav-item dropdown">
 				<a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-					[username]
+					<span sec:authentication="name" ></span>
 				</a>
 				<div class="dropdown-menu">
-					<a class="dropdown-item" href="#">login</a>
-					<a class="dropdown-item" href="#">logout</a>
+					<a class="dropdown-item" th:href="@{login}"  sec:authorize="!isAuthenticated()">login</a>
+					<a class="dropdown-item" th:href="@{logout}" sec:authorize="isAuthenticated()">logout</a>
 					<a class="dropdown-item" href="#">Profile</a>
 				</div>
 			</li>

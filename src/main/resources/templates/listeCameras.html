@@ -35,9 +35,10 @@
 			<td th:if="${c.lens != null}" th:text="${c.lens.focalLength}"></td>
 			<td th:if="${c.lens == null}" th:text="'Pas de Lens'"></td>
 
-            <td>
+            <td sec:authorize="hasAuthority('ADMIN')" >
               <a class="btn btn-danger"
-                 th:href="@{/supprimerCamera(id=${c.id}, page=${currentPage}, size=${size})}">
+                 th:href="@{/supprimerCamera(id=${c.id}, page=${currentPage}, size=${size})}" onclick="return confirm('Vous etes sur ?')"
+				 >
                  Supprimer
               </a>
 			  <a class="btn btn-success" th:href="@{/modifierCamera(id=${c.id},page=${currentPage},size=${size})}">Editer</a>

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.Foudhaili.Camera.Models.Camera;
+import com.Foudhaili.Camera.dto.CameraDTO;
 import com.Foudhaili.Camera.service.CameraService; 
 
 @RestController 
@@ -20,20 +21,20 @@ public class CameraRESTController {
 	private CameraService cameraService;
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public List<Camera> getAllCameras()
+	public List<CameraDTO> getAllCameras()
 	{
 		return cameraService.getAllCameras();
 	}
 	@RequestMapping(value="/{id}",method = RequestMethod.GET) 
-	public Camera getCameraById(@PathVariable("id") int id) {  
+	public CameraDTO getCameraById(@PathVariable("id") int id) {  
 	return cameraService.getCamera(id); 
 	}
 	@RequestMapping(method = RequestMethod.POST) 
-	public Camera createCamera(@RequestBody Camera cam) { 
+	public CameraDTO createCamera(@RequestBody CameraDTO cam) { 
 	return cameraService.saveCamera(cam); 
 	}
 	@RequestMapping(method = RequestMethod.PUT) 
-		public Camera updateCamera(@RequestBody Camera cam) { 
+		public CameraDTO updateCamera(@RequestBody CameraDTO cam) { 
 		return cameraService.updateCamera(cam); 
 	}
 	@RequestMapping(value="/{id}",method = RequestMethod.DELETE) 
